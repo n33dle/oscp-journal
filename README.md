@@ -235,6 +235,12 @@ enumdomusers (list users)
 getdompwinfo (password policy)
 ```
 
+
+Determine which servers are running Windows:
+```bash
+awk -F "OS: " '/^Nmap/ {a=$0} /OS: Windows/ {print a"\n"FS$2}' <smb-server-list.txt> | grep "Nmap" | cut -d " " -f 5 > smb-servers-running-windows.txt
+```
+
 > WORK IN PROGRESS
 > WORK IN PROGRESS
 > WORK IN PROGRESS
